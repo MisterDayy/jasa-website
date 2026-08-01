@@ -161,7 +161,7 @@ def admin_products():
         return redirect(url_for("admin_products"))
 
     res = supabase.table("products").select("*").order("created_at", desc=True).execute()
-    return render_template("admin/products.html", products=res.data)
+    return render_template("admin/products.html", products=res.data, active="produk")
 
 
 @app.route("/admin/produk/<product_id>/hapus", methods=["POST"])
@@ -181,7 +181,7 @@ def admin_orders():
     if status_filter != "all":
         query = query.eq("status", status_filter)
     res = query.execute()
-    return render_template("admin/orders.html", orders=res.data, status_filter=status_filter)
+    return render_template("admin/orders.html", orders=res.data, status_filter=status_filter, active="pesanan")
 
 
 @app.route("/admin/pesanan/<order_id>/approve", methods=["POST"])
@@ -215,7 +215,7 @@ def admin_settings():
         return redirect(url_for("admin_settings"))
 
     settings = get_settings()
-    return render_template("admin/settings.html", settings=settings)
+    return render_template("admin/settings.html", settings=settings, active="pengaturan")
 
 
 if __name__ == "__main__":

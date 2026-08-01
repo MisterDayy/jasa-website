@@ -1,85 +1,98 @@
 {% extends "base.html" %}
 {% block title %}Checkout — {{ product.name }}{% endblock %}
 {% block content %}
-<div class="max-w-2xl mx-auto px-6 py-12">
-  <a href="{{ url_for('catalog') }}" class="text-sm text-muted hover:text-ink">&larr; Kembali ke paket</a>
 
-  <div class="mt-6 bg-surface border border-line rounded-lg p-6">
-    <h1 class="font-display text-2xl font-semibold">{{ product.name }}</h1>
-    <p class="text-amber font-semibold mt-1">Rp {{ "{:,.0f}".format(product.price).replace(",", ".") }}</p>
-    <p class="text-muted text-sm mt-2">{{ product.description or "" }}</p>
-  </div>
+<nav class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between border-b border-line">
+  <a href="{{ url_for('landing') }}" class="font-display font-semibold text-lg tracking-tight">nex<span class="text-amber">lab</span></a>
+  <a href="{{ url_for('catalog') }}" class="text-sm text-muted hover:text-ink">&larr; Kembali ke paket</a>
+</nav>
+
+<div class="max-w-4xl mx-auto px-6 py-16">
+  <p class="font-mono text-xs tracking-widest text-violet mb-4">CHECKOUT</p>
+  <h1 class="font-display text-3xl font-semibold mb-8">{{ product.name }}</h1>
+
+  <dl class="grid grid-cols-2 max-w-sm border-t border-b border-line py-6 mb-12">
+    <div>
+      <dt class="font-mono text-xs text-muted uppercase tracking-wide">Paket</dt>
+      <dd class="font-semibold mt-1">{{ product.name }}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-xs text-muted uppercase tracking-wide">Harga</dt>
+      <dd class="font-display text-xl font-semibold mt-1 text-amber">Rp {{ "{:,.0f}".format(product.price).replace(",", ".") }}</dd>
+    </div>
+  </dl>
+  {% if product.description %}
+  <p class="text-muted text-sm -mt-8 mb-12 max-w-lg leading-relaxed">{{ product.description }}</p>
+  {% endif %}
 
   <!-- Syarat & Ketentuan -->
-  <div class="mt-6 bg-surface border border-line rounded-lg p-6">
-    <h2 class="font-display font-semibold text-lg mb-4">Syarat &amp; Ketentuan</h2>
-    <ul class="space-y-3 text-sm text-muted">
-      <li class="flex gap-3">
-        <span class="text-violet font-mono shrink-0">01</span>
-        <span><span class="text-ink font-medium">Estimasi pengerjaan</span> 3–14 hari kerja, tergantung tingkat kesulitan dan kelengkapan brief. Estimasi pasti diinfokan setelah brief dikonfirmasi.</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-violet font-mono shrink-0">02</span>
-        <span><span class="text-ink font-medium">Garansi 7 hari</span> setelah website diserahkan, khusus untuk perbaikan bug/error dari hasil pengerjaan kami — bukan penambahan fitur baru.</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-violet font-mono shrink-0">03</span>
-        <span><span class="text-ink font-medium">Di luar masa garansi</span> atau di luar cakupan bug, kami tidak lagi bertanggung jawab atas perubahan yang terjadi pada website.</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-violet font-mono shrink-0">04</span>
-        <span><span class="text-ink font-medium">Penambahan fitur</span> di luar scope awal (setelah website selesai) dikenakan biaya tambahan sesuai kompleksitas, dihitung terpisah dari paket ini.</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-violet font-mono shrink-0">05</span>
-        <span>Pembayaran yang sudah dikonfirmasi admin dianggap sebagai persetujuan terhadap syarat &amp; ketentuan ini.</span>
-      </li>
-    </ul>
-  </div>
+  <section class="border-b border-line pb-12 mb-12">
+    <h2 class="font-display font-semibold text-lg mb-6">Syarat &amp; Ketentuan</h2>
+    <div class="grid md:grid-cols-2 gap-x-10 gap-y-5">
+      {% for item in [
+        ("01", "Estimasi pengerjaan", "3–14 hari kerja, tergantung tingkat kesulitan dan kelengkapan brief."),
+        ("02", "Garansi 7 hari", "Berlaku untuk perbaikan bug/error dari hasil pengerjaan kami — bukan penambahan fitur baru."),
+        ("03", "Di luar garansi", "Kami tidak lagi bertanggung jawab atas perubahan yang terjadi pada website."),
+        ("04", "Penambahan fitur", "Di luar scope awal setelah website selesai dikenakan biaya tambahan terpisah."),
+      ] %}
+      <div class="border-l-2 border-violet pl-4">
+        <span class="font-mono text-xs text-muted">{{ item[0] }}</span>
+        <h3 class="font-semibold mt-1">{{ item[1] }}</h3>
+        <p class="text-muted text-sm mt-1 leading-relaxed">{{ item[2] }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="text-muted text-xs mt-6">Pembayaran yang sudah dikonfirmasi admin dianggap sebagai persetujuan terhadap syarat &amp; ketentuan ini.</p>
+  </section>
 
-  <div class="mt-8 grid md:grid-cols-2 gap-8">
+  <div class="grid md:grid-cols-2 gap-12">
     <div>
-      <h2 class="font-semibold mb-3">1. Scan &amp; Bayar</h2>
-      <img src="{{ url_for('static', filename='qris.png') }}" alt="QRIS Warung Dayynime Store" class="w-full max-w-xs mx-auto rounded-lg border border-line">
+      <p class="font-mono text-xs tracking-widest text-violet mb-4">01 — SCAN &amp; BAYAR</p>
+      <img src="{{ url_for('static', filename='qris.png') }}" alt="QRIS Warung Dayynime Store" class="w-full max-w-xs border border-line">
       <a href="{{ url_for('static', filename='qris.png') }}" download="QRIS-pembayaran.png"
-         class="mt-3 flex items-center justify-center gap-2 max-w-xs mx-auto px-4 py-2 rounded-md border border-line text-sm font-semibold hover:border-violet transition">
-        ⬇ Download QRIS
+         class="mt-3 flex items-center justify-center gap-2 max-w-xs px-4 py-2 rounded-md border border-line text-sm font-semibold hover:border-violet transition">
+        Download QRIS
       </a>
 
-      <div class="mt-6 bg-surface2 border border-line rounded-lg p-4">
-        <p class="text-sm font-semibold text-ink mb-2">Cara Bayar</p>
-        <ol class="text-sm text-muted space-y-1.5 list-decimal list-inside">
-          <li>Buka aplikasi e-wallet / mobile banking yang mendukung QRIS (Dana, OVO, GoPay, ShopeePay, m-Banking, dll).</li>
-          <li>Pilih menu <span class="text-ink">Scan QR</span>, arahkan ke gambar QRIS di atas — atau download dulu lalu upload dari galeri.</li>
-          <li>Pastikan nama merchant <span class="text-ink">"Warung Dayynime Store"</span> muncul, lalu masukkan nominal sesuai harga paket: <span class="text-amber font-medium">Rp {{ "{:,.0f}".format(product.price).replace(",", ".") }}</span>.</li>
-          <li>Selesaikan pembayaran, lalu simpan/screenshot bukti transaksinya.</li>
-          <li>Isi form di samping dan upload bukti pembayaran tersebut sebagai konfirmasi.</li>
+      <div class="mt-8 border-t border-line pt-6">
+        <p class="text-sm font-semibold mb-3">Cara Bayar</p>
+        <ol class="text-sm text-muted space-y-2 leading-relaxed">
+          <li><span class="font-mono text-violet mr-2">1.</span>Buka aplikasi e-wallet / mobile banking yang mendukung QRIS.</li>
+          <li><span class="font-mono text-violet mr-2">2.</span>Pilih <span class="text-ink">Scan QR</span>, arahkan ke gambar di atas — atau upload dari galeri kalau sudah didownload.</li>
+          <li><span class="font-mono text-violet mr-2">3.</span>Pastikan nama merchant <span class="text-ink">"Warung Dayynime Store"</span> muncul, masukkan nominal <span class="text-amber">Rp {{ "{:,.0f}".format(product.price).replace(",", ".") }}</span>.</li>
+          <li><span class="font-mono text-violet mr-2">4.</span>Selesaikan pembayaran, simpan bukti transaksinya.</li>
+          <li><span class="font-mono text-violet mr-2">5.</span>Isi form di samping dan upload bukti tersebut.</li>
         </ol>
       </div>
     </div>
 
     <div>
-      <h2 class="font-semibold mb-3">2. Konfirmasi Pembayaran</h2>
+      <p class="font-mono text-xs tracking-widest text-violet mb-4">02 — KONFIRMASI</p>
       <form method="POST" enctype="multipart/form-data" class="space-y-4">
         <div>
           <label class="text-sm font-medium text-muted">Nama Rekening</label>
-          <input type="text" name="buyer_name" required class="mt-1 w-full bg-surface2 border border-line rounded-lg px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-violet">
+          <input type="text" name="buyer_name" required class="mt-1 w-full bg-surface border border-line rounded-md px-3 py-2 text-ink focus:outline-none focus:border-violet">
         </div>
         <div>
           <label class="text-sm font-medium text-muted">Nomor Rekening</label>
-          <input type="text" name="bank_account" required class="mt-1 w-full bg-surface2 border border-line rounded-lg px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-violet">
+          <input type="text" name="bank_account" required class="mt-1 w-full bg-surface border border-line rounded-md px-3 py-2 text-ink focus:outline-none focus:border-violet">
         </div>
         <div>
           <label class="text-sm font-medium text-muted">Nomor WhatsApp</label>
-          <input type="text" name="whatsapp_number" required placeholder="08xxxxxxxxxx" class="mt-1 w-full bg-surface2 border border-line rounded-lg px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-violet">
+          <input type="text" name="whatsapp_number" required placeholder="08xxxxxxxxxx" class="mt-1 w-full bg-surface border border-line rounded-md px-3 py-2 text-ink focus:outline-none focus:border-violet">
         </div>
         <div>
           <label class="text-sm font-medium text-muted">Bukti Pembayaran <span class="text-amber">*wajib</span></label>
           <input type="file" name="payment_proof" accept="image/*" required class="mt-1 w-full text-sm text-muted">
         </div>
-        <button type="submit" class="w-full py-3 rounded-md bg-amber text-bg font-semibold hover:bg-violet hover:text-white transition">Kirim Konfirmasi</button>
+        <button type="submit" class="w-full py-3 rounded-md bg-amber text-bg font-semibold hover:bg-white transition">Kirim Konfirmasi</button>
       </form>
     </div>
   </div>
 </div>
+
+<footer class="max-w-6xl mx-auto px-6 py-8 text-sm text-muted flex justify-between border-t border-line">
+  <span>© 2026 Nexlab</span>
+  <a href="{{ url_for('admin_login') }}" class="hover:text-ink">Admin</a>
+</footer>
 {% endblock %}

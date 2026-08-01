@@ -1,35 +1,37 @@
 {% extends "base.html" %}
 {% block title %}Paket & Harga — Nexlab{% endblock %}
 {% block content %}
-<div class="max-w-6xl mx-auto px-6 py-12">
-  <a href="{{ url_for('landing') }}" class="text-sm text-muted hover:text-ink">&larr; Kembali</a>
-  <h1 class="font-display text-3xl font-semibold mt-4 mb-4">Pilih Paket</h1>
+
+<nav class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between border-b border-line">
+  <a href="{{ url_for('landing') }}" class="font-display font-semibold text-lg tracking-tight">nex<span class="text-amber">lab</span></a>
+  <a href="{{ url_for('landing') }}" class="text-sm text-muted hover:text-ink">&larr; Beranda</a>
+</nav>
+
+<div class="max-w-6xl mx-auto px-6 py-16">
+  <p class="font-mono text-xs tracking-widest text-violet mb-4">PAKET &amp; HARGA</p>
+  <h1 class="font-display text-3xl md:text-4xl font-semibold mb-10">Pilih Paket</h1>
 
   {% if settings and not settings.orders_open %}
-  <div class="mb-8 rounded-lg border border-amber/40 bg-amber/10 text-amber text-sm px-4 py-3">
+  <div class="mb-10 border border-amber/40 bg-amber/5 text-amber text-sm px-4 py-3 rounded-md">
     {{ settings.closed_message or "Orderan baru sedang ditutup sementara." }}
   </div>
   {% endif %}
 
   {% if products %}
-  <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+  <div class="grid sm:grid-cols-2 md:grid-cols-3 divide-x divide-y divide-line border border-line">
     {% for p in products %}
-    <div class="bg-surface border border-line rounded-lg overflow-hidden hover:border-violet transition flex flex-col">
+    <div class="bg-bg hover:bg-surface transition p-6 flex flex-col">
       {% if p.thumbnail_url %}
-      <img src="{{ p.thumbnail_url }}" alt="{{ p.name }}" class="w-full h-40 object-cover">
-      {% else %}
-      <div class="w-full h-40 bg-surface2"></div>
+      <img src="{{ p.thumbnail_url }}" alt="{{ p.name }}" class="w-full h-36 object-cover mb-4">
       {% endif %}
-      <div class="p-5 flex flex-col flex-1">
-        <h3 class="font-display font-semibold text-lg">{{ p.name }}</h3>
-        <p class="text-muted text-sm mt-2 flex-1">{{ p.description or "" }}</p>
-        <p class="font-semibold text-amber mt-4">Rp {{ "{:,.0f}".format(p.price).replace(",", ".") }}</p>
-        {% if settings and settings.orders_open %}
-        <a href="{{ url_for('checkout', product_id=p.id) }}" class="mt-4 text-center px-4 py-2 rounded-md bg-amber text-bg font-semibold hover:bg-violet hover:text-white transition">Pesan</a>
-        {% else %}
-        <span class="mt-4 text-center px-4 py-2 rounded-md bg-surface2 text-muted font-semibold cursor-not-allowed">Order Ditutup</span>
-        {% endif %}
-      </div>
+      <h3 class="font-display font-semibold text-lg">{{ p.name }}</h3>
+      <p class="text-muted text-sm mt-2 flex-1 leading-relaxed">{{ p.description or "" }}</p>
+      <p class="font-mono text-amber mt-4">Rp {{ "{:,.0f}".format(p.price).replace(",", ".") }}</p>
+      {% if settings and settings.orders_open %}
+      <a href="{{ url_for('checkout', product_id=p.id) }}" class="mt-4 text-center px-4 py-2 rounded-md bg-amber text-bg font-semibold hover:bg-white transition">Pesan</a>
+      {% else %}
+      <span class="mt-4 text-center px-4 py-2 rounded-md border border-line text-muted font-semibold cursor-not-allowed">Order Ditutup</span>
+      {% endif %}
     </div>
     {% endfor %}
   </div>
@@ -37,4 +39,9 @@
   <p class="text-muted">Belum ada paket yang tersedia.</p>
   {% endif %}
 </div>
+
+<footer class="max-w-6xl mx-auto px-6 py-8 text-sm text-muted flex justify-between border-t border-line">
+  <span>© 2026 Nexlab</span>
+  <a href="{{ url_for('admin_login') }}" class="hover:text-ink">Admin</a>
+</footer>
 {% endblock %}
