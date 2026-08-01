@@ -2,12 +2,12 @@
 {% block title %}Pesanan Diterima{% endblock %}
 {% block content %}
 <div class="max-w-lg mx-auto px-6 py-20 text-center">
-  <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+  <div class="w-14 h-14 rounded-full bg-emerald-950/40 text-emerald-400 border border-emerald-800 flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
   <h1 class="font-display text-2xl font-semibold mt-6">Pesanan Diterima</h1>
-  <p class="text-gray-600 mt-2">
+  <p class="text-muted mt-2">
     Terima kasih, {{ order.buyer_name }}. Pembayaran untuk
-    <strong>{{ order.products.name }}</strong> sedang kami verifikasi.
-    Status saat ini: <span class="font-semibold capitalize">{{ order.status }}</span>.
+    <strong class="text-ink">{{ order.products.name }}</strong> sedang kami verifikasi.
+    Status saat ini: <span class="font-semibold capitalize text-amber">{{ order.status }}</span>.
   </p>
   {% if admin_wa %}
   <a href="https://wa.me/{{ admin_wa }}?text=Halo%2C%20saya%20sudah%20order%20{{ order.products.name | urlencode }}%20(ID%3A%20{{ order.id }})"
@@ -16,7 +16,7 @@
   </a>
   {% endif %}
   <div>
-    <a href="{{ url_for('landing') }}" class="inline-block mt-8 text-sm text-gray-500 hover:text-ink">&larr; Kembali ke beranda</a>
+    <a href="{{ url_for('landing') }}" class="inline-block mt-8 text-sm text-muted hover:text-ink">&larr; Kembali ke beranda</a>
   </div>
 </div>
 {% endblock %}
