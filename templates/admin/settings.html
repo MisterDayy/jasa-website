@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Admin — Pengaturan{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-10">
+  <div class="flex items-center justify-between mb-8">
+    <div class="flex gap-4">
+      <a href="{{ url_for('admin_products') }}" class="text-muted hover:text-ink pb-1">Produk</a>
+      <a href="{{ url_for('admin_orders') }}" class="text-muted hover:text-ink pb-1">Pesanan</a>
+      <a href="{{ url_for('admin_settings') }}" class="font-semibold border-b-2 border-amber pb-1">Pengaturan</a>
+    </div>
+    <a href="{{ url_for('admin_logout') }}" class="text-sm text-muted hover:text-ink">Keluar</a>
+  </div>
+
+  <div class="max-w-lg">
+    <h2 class="font-display font-semibold text-lg mb-1">Penerimaan Orderan</h2>
+    <p class="text-muted text-sm mb-6">Kalau ditutup, halaman katalog dan checkout gak akan menerima order baru.</p>
+
+    <form method="POST" class="bg-surface border border-line rounded-lg p-5 space-y-5">
+      <label class="flex items-center justify-between cursor-pointer">
+        <span class="font-medium">Terima orderan baru</span>
+        <span class="relative inline-block w-11 h-6">
+          <input type="checkbox" name="orders_open" class="peer sr-only" {{ 'checked' if settings.orders_open }}>
+          <span class="absolute inset-0 rounded-full bg-surface2 border border-line peer-checked:bg-amber transition"></span>
+          <span class="absolute left-0.5 top-0.5 w-5 h-5 rounded-full bg-muted peer-checked:bg-bg peer-checked:translate-x-5 transition-transform"></span>
+        </span>
+      </label>
+
+      <div>
+        <label class="text-sm font-medium text-muted">Pesan saat ditutup</label>
+        <textarea name="closed_message" rows="3" class="mt-1 w-full bg-surface2 border border-line rounded-lg px-3 py-2 text-sm text-ink">{{ settings.closed_message or '' }}</textarea>
+      </div>
+
+      <button type="submit" class="w-full py-2.5 rounded-md bg-amber text-bg font-semibold text-sm hover:bg-white transition">Simpan Pengaturan</button>
+    </form>
+
+    <p class="text-xs text-muted mt-3">
+      Status saat ini:
+      <span class="font-semibold {{ 'text-emerald-400' if settings.orders_open else 'text-red-400' }}">
+        {{ 'Terbuka' if settings.orders_open else 'Ditutup' }}
+      </span>
+    </p>
+  </div>
+</div>
+{% endblock %}

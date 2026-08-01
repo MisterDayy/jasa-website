@@ -3,7 +3,13 @@
 {% block content %}
 <div class="max-w-6xl mx-auto px-6 py-12">
   <a href="{{ url_for('landing') }}" class="text-sm text-muted hover:text-ink">&larr; Kembali</a>
-  <h1 class="font-display text-3xl font-semibold mt-4 mb-10">Pilih Paket</h1>
+  <h1 class="font-display text-3xl font-semibold mt-4 mb-4">Pilih Paket</h1>
+
+  {% if settings and not settings.orders_open %}
+  <div class="mb-8 rounded-lg border border-amber/40 bg-amber/10 text-amber text-sm px-4 py-3">
+    {{ settings.closed_message or "Orderan baru sedang ditutup sementara." }}
+  </div>
+  {% endif %}
 
   {% if products %}
   <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -18,7 +24,11 @@
         <h3 class="font-display font-semibold text-lg">{{ p.name }}</h3>
         <p class="text-muted text-sm mt-2 flex-1">{{ p.description or "" }}</p>
         <p class="font-semibold text-amber mt-4">Rp {{ "{:,.0f}".format(p.price).replace(",", ".") }}</p>
+        {% if settings and settings.orders_open %}
         <a href="{{ url_for('checkout', product_id=p.id) }}" class="mt-4 text-center px-4 py-2 rounded-md bg-amber text-bg font-semibold hover:bg-violet hover:text-white transition">Pesan</a>
+        {% else %}
+        <span class="mt-4 text-center px-4 py-2 rounded-md bg-surface2 text-muted font-semibold cursor-not-allowed">Order Ditutup</span>
+        {% endif %}
       </div>
     </div>
     {% endfor %}

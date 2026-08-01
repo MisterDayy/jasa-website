@@ -28,5 +28,15 @@ create table if not exists admins (
   password_hash text not null
 );
 
+create table if not exists settings (
+  id int primary key default 1,
+  orders_open boolean not null default true,
+  closed_message text default 'Maaf, kami sedang menutup sementara penerimaan orderan baru. Silakan cek lagi nanti.',
+  constraint single_row check (id = 1)
+);
+
+insert into settings (id, orders_open) values (1, true)
+  on conflict (id) do nothing;
+
 -- Buat admin pertama (ganti password_hash pakai hasil dari generate_admin.py)
 -- insert into admins (username, password_hash) values ('admin', '<hash>');

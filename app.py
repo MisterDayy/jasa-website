@@ -48,6 +48,13 @@ def upload_image(file_storage, folder):
     return result["secure_url"]
 
 
+def get_settings():
+    res = supabase.table("settings").select("*").eq("id", 1).execute()
+    if res.data:
+        return res.data[0]
+    return {"orders_open": True, "closed_message": ""}
+
+
 # ---------- Halaman Publik ----------
 @app.route("/")
 def landing():
@@ -57,11 +64,17 @@ def landing():
 @app.route("/katalog")
 def catalog():
     res = supabase.table("products").select("*").order("created_at", desc=True).execute()
-    return render_template("catalog.html", products=res.data)
+    settings = get_settings()
+    return render_template("catalog.html", products=res.data, settings=settings)
 
 
 @app.route("/checkout/<product_id>", methods=["GET", "POST"])
 def checkout(product_id):
+    settings = get_settings()
+    if not settings.get("orders_open", True):
+        flash(settings.get("closed_message") or "Orderan baru sedang ditutup sementara.", "error")
+        return redirect(url_for("catalog"))
+
     res = supabase.table("products").select("*").eq("id", product_id).execute()
     if not res.data:
         abort(404)
@@ -185,6 +198,24 @@ def admin_reject_order(order_id):
     supabase.table("orders").update({"status": "rejected"}).eq("id", order_id).execute()
     flash("Pesanan ditolak.", "success")
     return redirect(url_for("admin_orders"))
+
+
+# ---------- Admin: Pengaturan ----------
+@app.route("/admin/pengaturan", methods=["GET", "POST"])
+@login_required
+def admin_settings():
+    if request.method == "POST":
+        orders_open = request.form.get("orders_open") == "on"
+        closed_message = request.form.get("closed_message", "").strip()
+        supabase.table("settings").update({
+            "orders_open": orders_open,
+            "closed_message": closed_message,
+        }).eq("id", 1).execute()
+        flash("Pengaturan disimpan.", "success")
+        return redirect(url_for("admin_settings"))
+
+    settings = get_settings()
+    return render_template("admin/settings.html", settings=settings)
 
 
 if __name__ == "__main__":
