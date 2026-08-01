@@ -13,7 +13,7 @@
   <div class="grid md:grid-cols-3 gap-8">
     <div class="md:col-span-1">
       <h2 class="font-semibold mb-3">Tambah Produk</h2>
-      <form method="POST" enctype="multipart/form-data" class="space-y-3 bg-surface border border-line rounded-2xl p-5">
+      <form method="POST" enctype="multipart/form-data" class="space-y-3 bg-surface border border-line rounded-lg p-5">
         <div>
           <label class="text-sm font-medium text-muted">Nama</label>
           <input type="text" name="name" required class="mt-1 w-full bg-surface2 border border-line rounded-lg px-3 py-2 text-sm text-ink">
@@ -30,7 +30,7 @@
           <label class="text-sm font-medium text-muted">Thumbnail</label>
           <input type="file" name="thumbnail" accept="image/*" class="mt-1 w-full text-sm text-muted">
         </div>
-        <button type="submit" class="w-full py-2.5 rounded-full bg-amber text-bg font-semibold text-sm hover:bg-violet hover:text-white transition">Simpan Produk</button>
+        <button type="submit" class="w-full py-2.5 rounded-md bg-amber text-bg font-semibold text-sm hover:bg-violet hover:text-white transition">Simpan Produk</button>
       </form>
     </div>
 
@@ -38,7 +38,7 @@
       <h2 class="font-semibold mb-3">Daftar Produk</h2>
       <div class="space-y-3">
         {% for p in products %}
-        <div class="flex items-center gap-4 bg-surface border border-line rounded-xl p-3">
+        <div class="flex items-center gap-4 bg-surface border border-line rounded-lg p-3">
           {% if p.thumbnail_url %}
           <img src="{{ p.thumbnail_url }}" class="w-14 h-14 object-cover rounded-lg">
           {% else %}

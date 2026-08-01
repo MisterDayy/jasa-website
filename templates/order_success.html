@@ -2,7 +2,7 @@
 {% block title %}Pesanan Diterima{% endblock %}
 {% block content %}
 <div class="max-w-lg mx-auto px-6 py-20 text-center">
-  <div class="w-14 h-14 rounded-full bg-emerald-950/40 text-emerald-400 border border-emerald-800 flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+  <div class="w-14 h-14 rounded-md bg-emerald-950/40 text-emerald-400 border border-emerald-800 flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
   <h1 class="font-display text-2xl font-semibold mt-6">Pesanan Diterima</h1>
   <p class="text-muted mt-2">
     Terima kasih, {{ order.buyer_name }}. Pembayaran untuk
@@ -11,7 +11,7 @@
   </p>
   {% if admin_wa %}
   <a href="https://wa.me/{{ admin_wa }}?text=Halo%2C%20saya%20sudah%20order%20{{ order.products.name | urlencode }}%20(ID%3A%20{{ order.id }})"
-     class="inline-block mt-6 px-6 py-3 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition">
+     class="inline-block mt-6 px-6 py-3 rounded-md bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition">
     Konfirmasi via WhatsApp
   </a>
   {% endif %}
