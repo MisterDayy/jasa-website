@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Pesanan Diterima{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto px-6 py-20 text-center">
+  <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+  <h1 class="font-display text-2xl font-semibold mt-6">Pesanan Diterima</h1>
+  <p class="text-gray-600 mt-2">
+    Terima kasih, {{ order.buyer_name }}. Pembayaran untuk
+    <strong>{{ order.products.name }}</strong> sedang kami verifikasi.
+    Status saat ini: <span class="font-semibold capitalize">{{ order.status }}</span>.
+  </p>
+  {% if admin_wa %}
+  <a href="https://wa.me/{{ admin_wa }}?text=Halo%2C%20saya%20sudah%20order%20{{ order.products.name | urlencode }}%20(ID%3A%20{{ order.id }})"
+     class="inline-block mt-6 px-6 py-3 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition">
+    Konfirmasi via WhatsApp
+  </a>
+  {% endif %}
+  <div>
+    <a href="{{ url_for('landing') }}" class="inline-block mt-8 text-sm text-gray-500 hover:text-ink">&larr; Kembali ke beranda</a>
+  </div>
+</div>
+{% endblock %}

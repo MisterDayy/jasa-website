@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Admin — Pesanan{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-10">
+  <div class="flex items-center justify-between mb-8">
+    <div class="flex gap-4">
+      <a href="{{ url_for('admin_products') }}" class="text-gray-500 hover:text-ink pb-1">Produk</a>
+      <a href="{{ url_for('admin_orders') }}" class="font-semibold border-b-2 border-ink pb-1">Pesanan</a>
+    </div>
+    <a href="{{ url_for('admin_logout') }}" class="text-sm text-gray-500 hover:text-ink">Keluar</a>
+  </div>
+
+  <div class="flex gap-2 mb-6">
+    {% for s in [("pending", "Menunggu"), ("approved", "Disetujui"), ("rejected", "Ditolak"), ("all", "Semua")] %}
+    <a href="{{ url_for('admin_orders', status=s[0]) }}"
+       class="text-xs font-semibold px-3 py-1.5 rounded-full {{ 'bg-ink text-white' if status_filter == s[0] else 'bg-gray-100 text-gray-600' }}">
+      {{ s[1] }}
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="space-y-4">
+    {% for o in orders %}
+    <div class="border border-gray-200 rounded-2xl p-5 grid md:grid-cols-4 gap-4">
+      <div class="md:col-span-2">
+        <p class="font-semibold">{{ o.products.name if o.products else "(produk dihapus)" }}</p>
+        <p class="text-sm text-gray-600 mt-1">{{ o.buyer_name }} · {{ o.bank_account }} · {{ o.whatsapp_number }}</p>
+        <p class="text-xs text-gray-400 mt-1">{{ o.created_at }}</p>
+        <span class="inline-block mt-2 text-xs font-semibold px-2 py-1 rounded-full
+          {{ 'bg-yellow-50 text-yellow-700' if o.status == 'pending' else 'bg-emerald-50 text-emerald-700' if o.status == 'approved' else 'bg-red-50 text-red-700' }}">
+          {{ o.status }}
+        </span>
+      </div>
+      <div>
+        <a href="{{ o.payment_proof_url }}" target="_blank" class="text-sm text-accent hover:underline">Lihat bukti bayar</a>
+      </div>
+      <div class="flex items-start gap-2">
+        {% if o.status == 'pending' %}
+        <form method="POST" action="{{ url_for('admin_approve_order', order_id=o.id) }}">
+          <button class="text-sm px-3 py-1.5 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600">Approve</button>
+        </form>
+        <form method="POST" action="{{ url_for('admin_reject_order', order_id=o.id) }}">
+          <button class="text-sm px-3 py-1.5 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600">Reject</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% else %}
+    <p class="text-sm text-gray-500">Tidak ada pesanan.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Checkout — {{ product.name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-6 py-12">
+  <a href="{{ url_for('catalog') }}" class="text-sm text-gray-500 hover:text-ink">&larr; Kembali ke paket</a>
+
+  <div class="mt-6 border border-gray-200 rounded-2xl p-6">
+    <h1 class="font-display text-2xl font-semibold">{{ product.name }}</h1>
+    <p class="text-accent font-semibold mt-1">Rp {{ "{:,.0f}".format(product.price).replace(",", ".") }}</p>
+    <p class="text-gray-600 text-sm mt-2">{{ product.description or "" }}</p>
+  </div>
+
+  <div class="mt-8 grid md:grid-cols-2 gap-8">
+    <div>
+      <h2 class="font-semibold mb-3">1. Scan &amp; Bayar</h2>
+      <img src="{{ url_for('static', filename='qris.png') }}" alt="QRIS Warung Dayynime Store" class="w-full max-w-xs mx-auto rounded-xl border border-gray-200">
+    </div>
+
+    <div>
+      <h2 class="font-semibold mb-3">2. Konfirmasi Pembayaran</h2>
+      <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        <div>
+          <label class="text-sm font-medium">Nama Rekening</label>
+          <input type="text" name="buyer_name" required class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent">
+        </div>
+        <div>
+          <label class="text-sm font-medium">Nomor Rekening</label>
+          <input type="text" name="bank_account" required class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent">
+        </div>
+        <div>
+          <label class="text-sm font-medium">Nomor WhatsApp</label>
+          <input type="text" name="whatsapp_number" required placeholder="08xxxxxxxxxx" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent">
+        </div>
+        <div>
+          <label class="text-sm font-medium">Bukti Pembayaran <span class="text-red-500">*wajib</span></label>
+          <input type="file" name="payment_proof" accept="image/*" required class="mt-1 w-full text-sm">
+        </div>
+        <button type="submit" class="w-full py-3 rounded-full bg-ink text-white font-semibold hover:bg-accent transition">Kirim Konfirmasi</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
